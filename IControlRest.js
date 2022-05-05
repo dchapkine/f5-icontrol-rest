@@ -45,10 +45,11 @@ const iControlRest = (params) => {
 	/**
 	 * Returns new icontrol rest api
 	 *
+	 * @param {Object} options - request options
 	 * @return {IControlRestClient} api client
 	 */
-	function client() {
-		return new IControlRestClient(params);
+	function client(options) {
+		return new IControlRestClient(params, options);
 	}
 
 	return {

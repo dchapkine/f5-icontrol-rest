@@ -14,10 +14,12 @@ class IControlRestClient {
 	/**
 	 * Ctor
 	 *
+	 * @param {Object} options - request options
 	 * @param {Object} params
 	 */
-	constructor(params) {
+	constructor(params, options) {
 		this.params = params;
+		this.options = options || {};
 		this.transactionId = null;
 	}
 
@@ -67,7 +69,7 @@ class IControlRestClient {
 		const {method, uri, data, ignoreTransaction} = reqParams;
 		const params = this.params;
 		const headers = {};
-		const options = {};
+		let options = {};
 		if (this.transactionId && ignoreTransaction !== true) {
 			headers['X-F5-REST-Coordination-Id'] = this.transactionId;
 		}
@@ -84,7 +86,9 @@ class IControlRestClient {
 		if (data) {
 			options.body = data;
 		}
-		// console.log("request", options)
+		// optional: override request options
+		options = Object.assign({}, options, this.options);
+
 		return new Promise((resolve, reject) => {
 			request(options, (e, r, obj) => {
 			  if (e) {
